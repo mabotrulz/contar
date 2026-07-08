@@ -12,7 +12,14 @@
   .header{text-align:center;padding:6px 12px 2px;flex-shrink:0;display:flex;justify-content:space-between;color:#888;font-size:clamp(11px,2.5vw,13px)}
   .header .score{color:#4ecca3;font-weight:700}
   
-  /* Progress bar */
+  /* Path */
+  .path-container{position:relative;width:100%;flex-shrink:0;height:clamp(100px,22vw,160px);margin-top:2px}
+  .path-container svg{width:100%;height:100%}
+  .path-dot{position:absolute;width:clamp(40px,10vw,60px);height:clamp(40px,10vw,60px);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 10px rgba(0,0,0,0.3)}
+  .path-dot .dot-img{width:80%;height:80%;object-fit:contain;border-radius:50%}
+  .path-dot .dot-icon{font-size:clamp(18px,4.5vw,28px)}
+  .path-dot.active{border:3px solid #f1c40f;box-shadow:0 0 20px rgba(241,196,15,0.5);transform:scale(1.1)}
+  .path-dot.done{border:3px solid #4ecca3;box-shadow:0 0 15px rgba(78,204,163,0.4)}
   .progress{display:flex;justify-content:center;gap:6px;padding:4px 12px;flex-shrink:0}
   .step{width:clamp(22px,5vw,36px);height:clamp(22px,5vw,36px);border-radius:50%;background:#333;border:2px solid #555;display:flex;align-items:center;justify-content:center;font-size:clamp(10px,2.2vw,16px);transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)}
   .step.active{background:#4ecca3;border-color:#4ecca3;color:#1a1a2e;font-weight:700;transform:scale(1.1)}
@@ -68,18 +75,20 @@
     <span class="score" id="scoreDisplay">0 ⭐</span>
   </div>
   
-  <div class="quest" id="questDisplay">
-    <span class="quest-icon" id="questIcon">🎯</span>
-    <span id="questText">Ajuda a Gabby a chegar ao objetivo!</span>
+  <div class="path-container" id="pathContainer">
+    <svg viewBox="0 0 300 160" preserveAspectRatio="xMidYMid meet">
+      <!-- Curved path -->
+      <path d="M35,140 Q80,120 120,130 T200,100 T260,50 Q270,40 240,30" fill="none" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+      <path id="pathProgress" d="M35,140 Q80,120 120,130 T200,100 T260,50 Q270,40 240,30" fill="none" stroke="#4ecca3" stroke-width="6" stroke-linecap="round" stroke-dasharray="800" stroke-dashoffset="800"/>
+    </svg>
+    <div class="path-dot" id="dot0" style="left:clamp(2%,3vw,7%);top:clamp(72%,14vw,58%)"><img class="dot-img" id="pathChar" src="" alt=""></div>
+    <div class="path-dot" id="dot1" style="left:clamp(12%,8vw,20%);top:clamp(58%,12vw,48%)"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot" id="dot2" style="left:clamp(28%,18vw,34%);top:clamp(62%,15vw,52%)"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot" id="dot3" style="left:clamp(50%,34vw,54%);top:clamp(48%,11vw,38%)"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot" id="dot4" style="left:clamp(72%,48vw,74%);top:clamp(28%,8vw,22%)"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot prize" id="dot5" style="left:clamp(72%,50vw,74%);top:clamp(8%,3vw,6%);border:none;background:none;box-shadow:none"><div class="dot-icon" id="goalIcon" style="font-size:clamp(24px,5vw,36px)">👑</div></div>
   </div>
-  
-  <div class="progress" id="progressBar"></div>
-  
   <div class="arena" id="arena">
-    <div class="char-banner">
-      <img id="charPortrait" src="" alt="">
-      <div class="name" id="charName"></div>
-    </div>
     <div class="question" id="questionText">Quantos amigos vês?</div>
     <div class="char-grid" id="charGrid"></div>
   </div>
@@ -173,25 +182,21 @@ function loadChar(){
   var c=CHARS[charIdx];
   if(!c){gameWin();return}
   charProgress=0;
-  document.getElementById('charPortrait').src='assets/'+c.file;
-  document.getElementById('charName').textContent=c.name;
-  document.getElementById('questIcon').textContent=c.goalIcon;
-  document.getElementById('questText').textContent=c.quest;
+  document.getElementById('pathChar').src='assets/'+c.file;
+  document.getElementById('goalIcon').textContent=c.goalIcon;
   document.getElementById('celebrateOverlay').classList.remove('active');
   updateProgress();
   loadRound();
 }
 
 function updateProgress(){
-  var bar=document.getElementById('progressBar');
-  bar.innerHTML='';
-  for(var i=0;i<STEPS;i++){
-    var s=document.createElement('div');
-    s.className='step';
-    if(i<charProgress)s.className+=' done';
-    else if(i===charProgress)s.className+=' active';
-    s.textContent=i+1;
-    bar.appendChild(s);
+  // Reset all dots
+  for(var i=0;i<=STEPS;i++){
+    var dot=document.getElementById('dot'+i);
+    if(!dot)continue;
+    dot.className='path-dot';
+    if(i<charProgress)dot.classList.add('done');
+    else if(i===charProgress)dot.classList.add('active');
   }
 }
 
