@@ -76,16 +76,30 @@
   </div>
   
   <div class="path-container" id="pathContainer">
-    <svg viewBox="0 0 300 160" preserveAspectRatio="xMidYMid meet">
-      <path id="pathTrack" d="M25,120 C55,115 75,100 95,100 C125,100 130,95 140,85 C155,75 170,70 185,65 C195,55 205,40 215,25" fill="none" stroke="#333" stroke-width="6" stroke-linecap="round"/>
-      <path id="pathProgress" d="M25,120 C55,115 75,100 95,100 C125,100 130,95 140,85 C155,75 170,70 185,65 C195,55 205,40 215,25" fill="none" stroke="#4ecca3" stroke-width="6" stroke-linecap="round" stroke-dasharray="800" stroke-dashoffset="800"/>
+    <svg viewBox="0 0 300 160" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%">
+      <defs>
+        <clipPath id="svgClip"><rect x="0" y="0" width="300" height="160"/></clipPath>
+      </defs>
+      <!-- Path line -->
+      <path id="pathTrack" d="M25,120 C55,115 75,100 95,100 C125,100 130,95 140,85 C155,75 170,70 185,65 C195,55 205,40 215,25" fill="none" stroke="#333" stroke-width="5" stroke-linecap="round"/>
+      <path id="pathProgress" d="M25,120 C55,115 75,100 95,100 C125,100 130,95 140,85 C155,75 170,70 185,65 C195,55 205,40 215,25" fill="none" stroke="#4ecca3" stroke-width="5" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"/>
+      <!-- Waypoints as SVG circles with text -->
+      <circle cx="55" cy="108" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2" id="svgWp1"/>
+      <text x="55" y="114" text-anchor="middle" fill="#888" font-size="14" id="svgTxt1">⭐</text>
+      <circle cx="95" cy="100" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2" id="svgWp2"/>
+      <text x="95" y="106" text-anchor="middle" fill="#888" font-size="14" id="svgTxt2">⭐</text>
+      <circle cx="140" cy="85" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2" id="svgWp3"/>
+      <text x="140" y="91" text-anchor="middle" fill="#888" font-size="14" id="svgTxt3">⭐</text>
+      <circle cx="185" cy="65" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2" id="svgWp4"/>
+      <text x="185" y="71" text-anchor="middle" fill="#888" font-size="14" id="svgTxt4">⭐</text>
+      <!-- Prize at end -->
+      <text x="215" y="30" text-anchor="middle" font-size="24" id="goalIcon">👑</text>
+      <!-- Character (moves along path) -->
+      <g id="charGroup" style="transition:transform 0.6s cubic-bezier(0.34,1.56,0.64,1)">
+        <circle cx="0" cy="0" r="20" fill="none" stroke="#f1c40f" stroke-width="3" id="charGlow"/>
+        <image id="pathCharImg" x="-15" y="-15" width="30" height="30" preserveAspectRatio="xMidYMid meet" href=""/>
+      </g>
     </svg>
-    <div class="path-dot wp" id="wp1" style="left:18%;top:67%"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot wp" id="wp2" style="left:32%;top:62%"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot wp" id="wp3" style="left:47%;top:53%"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot wp" id="wp4" style="left:62%;top:41%"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot wp" id="wp5" style="left:72%;top:16%;border:none;background:none;box-shadow:none"><div class="dot-icon" id="goalIcon" style="font-size:clamp(24px,5vw,36px)">👑</div></div>
-    <div class="path-dot active" id="pathChar" style="left:8%;top:75%;position:absolute;z-index:10;transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1), top 0.6s cubic-bezier(0.34,1.56,0.64,1)"><img class="dot-img" id="pathCharImg" src="" alt=""></div>
   </div>
   <div class="arena" id="arena">
     <div class="question" id="questionText">Quantos amigos vês?</div>
@@ -126,14 +140,14 @@ const CHARS = [
   {file:'baby_box.png',name:'Baby Box',goal:'os seus brinquedos 🎁',goalIcon:'🎁',quest:'Ajuda o Baby Box a chegar aos brinquedos!'},
 ];
 const STEPS = 5;
-// Waypoint positions for character to move along (% left, % top)
+// Waypoint positions in SVG coordinates (300x160 viewBox)
 const WAYPOINTS = [
-  {l:'8%', t:'75%'},
-  {l:'18%', t:'67%'},
-  {l:'32%', t:'62%'},
-  {l:'47%', t:'53%'},
-  {l:'62%', t:'41%'},
-  {l:'72%', t:'16%'},
+  {x:25, y:120},
+  {x:55, y:108},
+  {x:95, y:100},
+  {x:140, y:85},
+  {x:185, y:65},
+  {x:215, y:25},
 ];
 
 let score=0,charIdx=0,charProgress=0,audioInit=false,audioCtx=null;
@@ -190,22 +204,21 @@ function loadChar(){
   var c=CHARS[charIdx];
   if(!c){gameWin();return}
   charProgress=0;
-  document.getElementById('pathCharImg').src='assets/'+c.file;
+  document.getElementById('pathCharImg').setAttribute('href', 'assets/'+c.file);
   document.getElementById('goalIcon').textContent=c.goalIcon;
   document.getElementById('celebrateOverlay').classList.remove('active');
+  document.getElementById('charGroup').setAttribute('transform', 'translate('+WAYPOINTS[0].x+','+WAYPOINTS[0].y+')');
   updateProgress();
   loadRound();
 }
 
 function updateProgress(){
   // Move character along the path to next waypoint
-  var charEl=document.getElementById('pathChar');
   var wp=WAYPOINTS[charProgress]||WAYPOINTS[0];
-  charEl.style.left=wp.l;
-  charEl.style.top=wp.t;
+  document.getElementById('charGroup').setAttribute('transform', 'translate('+wp.x+','+wp.y+')');
   
-  // Update the progress path (first 20% per step)
-  var totalLen=800;
+  // Update the progress path
+  var totalLen=400;
   var pct=charProgress/STEPS;
   document.getElementById('pathProgress').style.strokeDashoffset=totalLen-(totalLen*pct);
 }
