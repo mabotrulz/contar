@@ -13,8 +13,8 @@
   .header .score{color:#4ecca3;font-weight:700}
   
   /* Path */
-  .path-container{position:relative;width:100%;flex-shrink:0;height:clamp(170px, 48vw, 300px);margin:2px auto 0}
-  .path-container svg{width:100%;height:100%}
+  .path-container{position:relative;width:100%;flex-shrink:0;height:clamp(170px, 48vw, 300px);margin:2px auto 0;text-align:center}
+  .path-container svg{width:100%;height:100%;display:block;margin:0 auto}
   .path-dot{position:absolute;width:clamp(40px,10vw,60px);height:clamp(40px,10vw,60px);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 10px rgba(0,0,0,0.3)}
   .path-dot .dot-img{width:80%;height:80%;object-fit:contain;border-radius:50%}
   .path-dot .dot-icon{font-size:clamp(18px,4.5vw,28px)}
@@ -133,11 +133,11 @@
 </div>
 <script>
 const CHARS = [
-  {file:'gabby.png',name:'Gabby',goal:'as suas tiaras 👑',goalIcon:'👑',quest:'Ajuda a Gabby a chegar às suas tiaras!'},
-  {file:'pandy.png',name:'Pandy Paws',goal:'os seus sapatos de dança 🩰',goalIcon:'🩰',quest:'Ajuda o Pandy a chegar aos seus sapatos!'},
-  {file:'kitty_fairy.png',name:'Kitty Fairy',goal:'o seu jardim mágico 🌸',goalIcon:'🌸',quest:'Ajuda a Kitty Fairy a chegar ao jardim!'},
-  {file:'pillow_cat.png',name:'Pillow Cat',goal:'as suas almofadas 🛏️',goalIcon:'🛏️',quest:'Ajuda a Pillow Cat a chegar às almofadas!'},
-  {file:'baby_box.png',name:'Baby Box',goal:'os seus brinquedos 🎁',goalIcon:'🎁',quest:'Ajuda o Baby Box a chegar aos brinquedos!'},
+  {file:'gabby.png',name:'Gabby',goal:'às suas tiaras 👑',goalIcon:'👑'},
+  {file:'pandy.png',name:'Pandy Paws',goal:'aos seus sapatos de dança 🩰',goalIcon:'🩰'},
+  {file:'kitty_fairy.png',name:'Kitty Fairy',goal:'ao seu jardim mágico 🌸',goalIcon:'🌸'},
+  {file:'pillow_cat.png',name:'Pillow Cat',goal:'às suas almofadas 🛏️',goalIcon:'🛏️'},
+  {file:'baby_box.png',name:'Baby Box',goal:'aos seus brinquedos 🎁',goalIcon:'🎁'},
 ];
 const STEPS = 5;
 // Waypoint positions in SVG coordinates (300x160 viewBox)
