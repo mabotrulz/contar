@@ -13,7 +13,7 @@
   .header .score{color:#4ecca3;font-weight:700}
   
   /* Path */
-  .path-container{position:relative;width:100%;flex-shrink:0;height:clamp(100px,22vw,160px);margin-top:2px}
+  .path-container{position:relative;width:min(90%,500px);flex-shrink:0;height:clamp(140px,36vw,260px);margin:4px auto 0}
   .path-container svg{width:100%;height:100%}
   .path-dot{position:absolute;width:clamp(40px,10vw,60px);height:clamp(40px,10vw,60px);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 10px rgba(0,0,0,0.3)}
   .path-dot .dot-img{width:80%;height:80%;object-fit:contain;border-radius:50%}
@@ -83,21 +83,21 @@
       <!-- Path line -->
       <path id="pathTrack" d="M25,120 C55,115 75,100 95,100 C125,100 130,95 140,85 C155,75 170,70 185,65 C195,55 205,40 215,25" fill="none" stroke="#333" stroke-width="5" stroke-linecap="round"/>
       <path id="pathProgress" d="M25,120 C55,115 75,100 95,100 C125,100 130,95 140,85 C155,75 170,70 185,65 C195,55 205,40 215,25" fill="none" stroke="#4ecca3" stroke-width="5" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"/>
-      <!-- Waypoints as SVG circles with text -->
-      <circle cx="55" cy="108" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2" id="svgWp1"/>
-      <text x="55" y="114" text-anchor="middle" fill="#888" font-size="14" id="svgTxt1">⭐</text>
-      <circle cx="95" cy="100" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2" id="svgWp2"/>
-      <text x="95" y="106" text-anchor="middle" fill="#888" font-size="14" id="svgTxt2">⭐</text>
-      <circle cx="140" cy="85" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2" id="svgWp3"/>
-      <text x="140" y="91" text-anchor="middle" fill="#888" font-size="14" id="svgTxt3">⭐</text>
-      <circle cx="185" cy="65" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2" id="svgWp4"/>
-      <text x="185" y="71" text-anchor="middle" fill="#888" font-size="14" id="svgTxt4">⭐</text>
+      <!-- Waypoints as SVG circles -->
+      <circle cx="55" cy="108" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2.5" id="svgWp1"/>
+      <text x="55" y="114" text-anchor="middle" font-size="16" fill="#888" id="txt1">⭐</text>
+      <circle cx="95" cy="100" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2.5" id="svgWp2"/>
+      <text x="95" y="106" text-anchor="middle" font-size="16" fill="#888" id="txt2">⭐</text>
+      <circle cx="140" cy="85" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2.5" id="svgWp3"/>
+      <text x="140" y="91" text-anchor="middle" font-size="16" fill="#888" id="txt3">⭐</text>
+      <circle cx="185" cy="65" r="16" fill="#2d2d4e" stroke="#555" stroke-width="2.5" id="svgWp4"/>
+      <text x="185" y="71" text-anchor="middle" font-size="16" fill="#888" id="txt4">⭐</text>
       <!-- Prize at end -->
-      <text x="215" y="30" text-anchor="middle" font-size="24" id="goalIcon">👑</text>
-      <!-- Character (moves along path) -->
+      <text x="215" y="30" text-anchor="middle" font-size="26" id="goalIcon">👑</text>
+      <!-- Character -->
       <g id="charGroup" style="transition:transform 0.6s cubic-bezier(0.34,1.56,0.64,1)">
-        <circle cx="0" cy="0" r="20" fill="none" stroke="#f1c40f" stroke-width="3" id="charGlow"/>
-        <image id="pathCharImg" x="-15" y="-15" width="30" height="30" preserveAspectRatio="xMidYMid meet" href=""/>
+        <circle cx="0" cy="0" r="22" fill="none" stroke="#f1c40f" stroke-width="3" id="charGlow"/>
+        <image id="pathCharImg" x="-17" y="-17" width="34" height="34" preserveAspectRatio="xMidYMid meet" href=""/>
       </g>
     </svg>
   </div>
