@@ -77,16 +77,18 @@
   
   <div class="path-container" id="pathContainer">
     <svg viewBox="0 0 300 160" preserveAspectRatio="xMidYMid meet">
-      <!-- Curved path -->
-      <path d="M35,140 Q80,120 120,130 T200,100 T260,50 Q270,40 240,30" fill="none" stroke="#333" stroke-width="6" stroke-linecap="round"/>
-      <path id="pathProgress" d="M35,140 Q80,120 120,130 T200,100 T260,50 Q270,40 240,30" fill="none" stroke="#4ecca3" stroke-width="6" stroke-linecap="round" stroke-dasharray="800" stroke-dashoffset="800"/>
+      <!-- Curved path connecting all waypoints -->
+      <path id="pathTrack" d="M25,120 C60,110 80,95 110,105 C130,112 150,105 170,90 C190,75 210,65 235,50 C255,38 260,25 230,20" fill="none" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+      <path id="pathProgress" d="M25,120 C60,110 80,95 110,105 C130,112 150,105 170,90 C190,75 210,65 235,50 C255,38 260,25 230,20" fill="none" stroke="#4ecca3" stroke-width="6" stroke-linecap="round" stroke-dasharray="800" stroke-dashoffset="800"/>
     </svg>
-    <div class="path-dot" id="dot0" style="left:clamp(2%,3vw,7%);top:clamp(72%,14vw,58%)"><img class="dot-img" id="pathChar" src="" alt=""></div>
-    <div class="path-dot" id="dot1" style="left:clamp(12%,8vw,20%);top:clamp(58%,12vw,48%)"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot" id="dot2" style="left:clamp(28%,18vw,34%);top:clamp(62%,15vw,52%)"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot" id="dot3" style="left:clamp(50%,34vw,54%);top:clamp(48%,11vw,38%)"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot" id="dot4" style="left:clamp(72%,48vw,74%);top:clamp(28%,8vw,22%)"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot prize" id="dot5" style="left:clamp(72%,50vw,74%);top:clamp(8%,3vw,6%);border:none;background:none;box-shadow:none"><div class="dot-icon" id="goalIcon" style="font-size:clamp(24px,5vw,36px)">👑</div></div>
+    <!-- Waypoints (static) and prize at end -->
+    <div class="path-dot wp" id="wp1" style="left:clamp(8%,6vw,14%);top:clamp(58%,12vw,46%)"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot wp" id="wp2" style="left:clamp(24%,17vw,30%);top:clamp(60%,14vw,50%)"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot wp" id="wp3" style="left:clamp(44%,30vw,48%);top:clamp(48%,11vw,38%)"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot wp" id="wp4" style="left:clamp(64%,45vw,66%);top:clamp(32%,9vw,26%)"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot wp" id="wp5" style="left:clamp(68%,48vw,72%);top:clamp(8%,3vw,6%);border:none;background:none;box-shadow:none"><div class="dot-icon" id="goalIcon" style="font-size:clamp(24px,5vw,36px)">👑</div></div>
+    <!-- Character (moves along path) -->
+    <div class="path-dot active" id="pathChar" style="left:clamp(2%,2vw,5%);top:clamp(72%,15vw,60%);position:absolute;z-index:10;transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1), top 0.6s cubic-bezier(0.34,1.56,0.64,1)"><img class="dot-img" src="" alt="" style="width:100%;height:100%;object-fit:contain;border-radius:50%"></div>
   </div>
   <div class="arena" id="arena">
     <div class="question" id="questionText">Quantos amigos vês?</div>
@@ -127,6 +129,15 @@ const CHARS = [
   {file:'baby_box.png',name:'Baby Box',goal:'os seus brinquedos 🎁',goalIcon:'🎁',quest:'Ajuda o Baby Box a chegar aos brinquedos!'},
 ];
 const STEPS = 5;
+// Waypoint positions for character to move along (% left, % top)
+const WAYPOINTS = [
+  {l:'clamp(2%,2vw,5%)', t:'clamp(72%,15vw,60%)'},
+  {l:'clamp(8%,6vw,14%)', t:'clamp(58%,12vw,46%)'},
+  {l:'clamp(24%,17vw,30%)', t:'clamp(60%,14vw,50%)'},
+  {l:'clamp(44%,30vw,48%)', t:'clamp(48%,11vw,38%)'},
+  {l:'clamp(64%,45vw,66%)', t:'clamp(32%,9vw,26%)'},
+  {l:'clamp(68%,48vw,72%)', t:'clamp(8%,3vw,6%)'},
+];
 
 let score=0,charIdx=0,charProgress=0,audioInit=false,audioCtx=null;
 let currentCount=0, correctAnswer=0;
@@ -190,14 +201,16 @@ function loadChar(){
 }
 
 function updateProgress(){
-  // Reset all dots
-  for(var i=0;i<=STEPS;i++){
-    var dot=document.getElementById('dot'+i);
-    if(!dot)continue;
-    dot.className='path-dot';
-    if(i<charProgress)dot.classList.add('done');
-    else if(i===charProgress)dot.classList.add('active');
-  }
+  // Move character along the path to next waypoint
+  var charEl=document.getElementById('pathChar');
+  var wp=WAYPOINTS[charProgress]||WAYPOINTS[0];
+  charEl.style.left=wp.l;
+  charEl.style.top=wp.t;
+  
+  // Update the progress path (first 20% per step)
+  var totalLen=800;
+  var pct=charProgress/STEPS;
+  document.getElementById('pathProgress').style.strokeDashoffset=totalLen-(totalLen*pct);
 }
 
 function loadRound(){
