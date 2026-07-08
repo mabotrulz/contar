@@ -77,18 +77,15 @@
   
   <div class="path-container" id="pathContainer">
     <svg viewBox="0 0 300 160" preserveAspectRatio="xMidYMid meet">
-      <!-- Curved path connecting all waypoints -->
-      <path id="pathTrack" d="M25,120 C60,110 80,95 110,105 C130,112 150,105 170,90 C190,75 210,65 235,50 C255,38 260,25 230,20" fill="none" stroke="#333" stroke-width="6" stroke-linecap="round"/>
-      <path id="pathProgress" d="M25,120 C60,110 80,95 110,105 C130,112 150,105 170,90 C190,75 210,65 235,50 C255,38 260,25 230,20" fill="none" stroke="#4ecca3" stroke-width="6" stroke-linecap="round" stroke-dasharray="800" stroke-dashoffset="800"/>
+      <path id="pathTrack" d="M25,120 C55,115 75,100 95,100 C125,100 130,95 140,85 C155,75 170,70 185,65 C195,55 205,40 215,25" fill="none" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+      <path id="pathProgress" d="M25,120 C55,115 75,100 95,100 C125,100 130,95 140,85 C155,75 170,70 185,65 C195,55 205,40 215,25" fill="none" stroke="#4ecca3" stroke-width="6" stroke-linecap="round" stroke-dasharray="800" stroke-dashoffset="800"/>
     </svg>
-    <!-- Waypoints (static) and prize at end -->
-    <div class="path-dot wp" id="wp1" style="left:clamp(8%,6vw,14%);top:clamp(58%,12vw,46%)"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot wp" id="wp2" style="left:clamp(24%,17vw,30%);top:clamp(60%,14vw,50%)"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot wp" id="wp3" style="left:clamp(44%,30vw,48%);top:clamp(48%,11vw,38%)"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot wp" id="wp4" style="left:clamp(64%,45vw,66%);top:clamp(32%,9vw,26%)"><div class="dot-icon">⭐</div></div>
-    <div class="path-dot wp" id="wp5" style="left:clamp(68%,48vw,72%);top:clamp(8%,3vw,6%);border:none;background:none;box-shadow:none"><div class="dot-icon" id="goalIcon" style="font-size:clamp(24px,5vw,36px)">👑</div></div>
-    <!-- Character (moves along path) -->
-    <div class="path-dot active" id="pathChar" style="left:clamp(2%,2vw,5%);top:clamp(72%,15vw,60%);position:absolute;z-index:10;transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1), top 0.6s cubic-bezier(0.34,1.56,0.64,1)"><img class="dot-img" src="" alt="" style="width:100%;height:100%;object-fit:contain;border-radius:50%"></div>
+    <div class="path-dot wp" id="wp1" style="left:18%;top:67%"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot wp" id="wp2" style="left:32%;top:62%"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot wp" id="wp3" style="left:47%;top:53%"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot wp" id="wp4" style="left:62%;top:41%"><div class="dot-icon">⭐</div></div>
+    <div class="path-dot wp" id="wp5" style="left:72%;top:16%;border:none;background:none;box-shadow:none"><div class="dot-icon" id="goalIcon" style="font-size:clamp(24px,5vw,36px)">👑</div></div>
+    <div class="path-dot active" id="pathChar" style="left:8%;top:75%;position:absolute;z-index:10;transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1), top 0.6s cubic-bezier(0.34,1.56,0.64,1)"><img class="dot-img" id="pathCharImg" src="" alt=""></div>
   </div>
   <div class="arena" id="arena">
     <div class="question" id="questionText">Quantos amigos vês?</div>
@@ -131,12 +128,12 @@ const CHARS = [
 const STEPS = 5;
 // Waypoint positions for character to move along (% left, % top)
 const WAYPOINTS = [
-  {l:'clamp(2%,2vw,5%)', t:'clamp(72%,15vw,60%)'},
-  {l:'clamp(8%,6vw,14%)', t:'clamp(58%,12vw,46%)'},
-  {l:'clamp(24%,17vw,30%)', t:'clamp(60%,14vw,50%)'},
-  {l:'clamp(44%,30vw,48%)', t:'clamp(48%,11vw,38%)'},
-  {l:'clamp(64%,45vw,66%)', t:'clamp(32%,9vw,26%)'},
-  {l:'clamp(68%,48vw,72%)', t:'clamp(8%,3vw,6%)'},
+  {l:'8%', t:'75%'},
+  {l:'18%', t:'67%'},
+  {l:'32%', t:'62%'},
+  {l:'47%', t:'53%'},
+  {l:'62%', t:'41%'},
+  {l:'72%', t:'16%'},
 ];
 
 let score=0,charIdx=0,charProgress=0,audioInit=false,audioCtx=null;
@@ -193,7 +190,7 @@ function loadChar(){
   var c=CHARS[charIdx];
   if(!c){gameWin();return}
   charProgress=0;
-  document.getElementById('pathChar').src='assets/'+c.file;
+  document.getElementById('pathCharImg').src='assets/'+c.file;
   document.getElementById('goalIcon').textContent=c.goalIcon;
   document.getElementById('celebrateOverlay').classList.remove('active');
   updateProgress();
