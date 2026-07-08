@@ -103,6 +103,7 @@ function loadRound(){
   const charName=CHAR_NAMES[charFile];
   
   document.getElementById('questionText').textContent='Quantos ' + charName + ' vês?';
+  speak('Quantos ' + charName + ' vês?', 'pt-PT');
   
   // Show characters
   const grid=document.getElementById('charGrid');
