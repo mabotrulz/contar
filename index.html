@@ -73,6 +73,7 @@
   <div class="header">
     <span>🏠 Gabby's Dollhouse</span>
     <span class="score" id="scoreDisplay">0 ⭐</span>
+    <span id="phaseLabel" style="color:#f1c40f;font-size:clamp(10px,2vw,13px)">0-9</span>
   </div>
   
   <div class="path-container" id="pathContainer">
@@ -142,7 +143,7 @@ const WAYPOINTS = [
 ];
 
 let score=0,charIdx=0,charProgress=0,audioInit=false,audioCtx=null;
-let currentCount=0, correctAnswer=0;
+let currentCount=0,correctAnswer=0,phase=1; // phase 1: 0-9, phase 2: 0-20
 
 function initAudio(){if(audioInit)return;audioInit=true;try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}catch(e){}}
 
@@ -216,7 +217,8 @@ function updateProgress(){
 
 function loadRound(){
   var c=CHARS[charIdx];
-  currentCount=Math.floor(Math.random()*21);
+  var maxNum=phase===1?9:20;
+  currentCount=Math.floor(Math.random()*(maxNum+1));
   correctAnswer=currentCount;
   
   document.getElementById('questionText').textContent='Quantos '+c.name+' vês?';
@@ -233,7 +235,7 @@ function loadRound(){
   }
   
   var opts=[currentCount];
-  while(opts.length<4){var r=Math.floor(Math.random()*21);if(!opts.includes(r))opts.push(r)}
+  while(opts.length<4){var r=Math.floor(Math.random()*(maxNum+1));if(!opts.includes(r))opts.push(r)}
   opts=shuffle(opts);
   
   var optDiv=document.getElementById('options');
@@ -296,7 +298,19 @@ function showCelebration(){
 
 function nextChar(){
   charIdx++;
-  if(charIdx>=CHARS.length){gameWin();return}
+  if(charIdx>=CHARS.length){
+    if(phase===1){
+      phase=2;
+      charIdx=0;
+      document.getElementById('celebrateOverlay').classList.remove('active');
+      document.getElementById('phaseLabel').textContent='0-20 ⭐';
+      loadChar();
+      speak('Muito bem! Agora até 20!','pt-PT');
+      return;
+    }
+    gameWin();
+    return
+  }
   document.getElementById('celebrateOverlay').classList.remove('active');
   loadChar();
 }
