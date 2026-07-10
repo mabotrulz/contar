@@ -217,7 +217,7 @@ function updateProgress(){
 
 function loadRound(){
   var c=CHARS[charIdx];
-  var maxNum=phase===1?5:10;
+  var maxNum=phase===1?9:20;
   currentCount=Math.floor(Math.random()*(maxNum+1));
   correctAnswer=currentCount;
   
@@ -303,7 +303,7 @@ function nextChar(){
       phase=2;
       charIdx=0;
       document.getElementById('celebrateOverlay').classList.remove('active');
-      document.getElementById('phaseLabel').textContent='0-10 ⭐';
+      document.getElementById('phaseLabel').textContent='0-20 ⭐';
       loadChar();
       speak('Muito bem! Agora até 20!','pt-PT');
       return;
