@@ -66,6 +66,23 @@
   .confetti-container{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:150}
   .conf{position:absolute;width:10px;height:10px;border-radius:2px;animation:confettiFall linear forwards}
   @keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+  /* ===== Mobile kid-size boost ===== */
+  @media (max-width:600px){
+    .header{font-size:clamp(13px,3.8vw,16px);padding:8px 14px 4px}
+    .path-container{height:clamp(150px,40vw,260px)}
+    .question{font-size:clamp(19px,5.5vw,26px);margin-bottom:8px}
+    .char-grid{gap:clamp(6px,2.5vw,10px);max-height:none;padding:8px}
+    .char-grid .char{width:clamp(54px,15vw,84px);height:clamp(54px,15vw,84px);border-radius:12px;padding:4px}
+    .options{gap:clamp(10px,3vw,14px);padding:8px 14px 16px}
+    .opt{font-size:clamp(30px,9vw,46px);padding:clamp(16px,4.5vw,26px);border-radius:18px;border-width:4px}
+    .feedback{font-size:clamp(16px,4.2vw,22px);min-height:26px;padding:4px 12px}
+    .celebrate h2{font-size:clamp(30px,9vw,46px)}
+    .celebrate .sub{font-size:clamp(18px,5vw,26px)}
+    .celebrate .big-img{width:clamp(110px,28vw,160px);height:clamp(110px,28vw,160px)}
+    .celebrate .obj-icon{font-size:clamp(48px,13vw,72px)}
+    .celebrate button{font-size:clamp(18px,5vw,24px);padding:16px 40px;border-radius:999px}
+  }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
 <style>
