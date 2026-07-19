@@ -6,57 +6,56 @@
 <title>Contar — Gabby's Dollhouse</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#1a1a2e;font-family:'Segoe UI',sans-serif;display:flex;justify-content:center;align-items:center;min-height:100dvh;overflow:hidden;user-select:none}
-  .game{width:100vw;height:100dvh;max-width:600px;background:linear-gradient(180deg,#1a1a2e,#16213e,#0f3460);display:flex;flex-direction:column;position:relative;overflow:hidden}
-  
-  .header{text-align:center;padding:6px 12px 2px;flex-shrink:0;display:flex;justify-content:space-between;color:#888;font-size:clamp(11px,2.5vw,13px)}
-  .header .score{color:#4ecca3;font-weight:700}
-  
+  body{background:#2d1b4e;font-family:'Baloo 2','Comic Sans MS','Chalkboard SE',system-ui,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100dvh;overflow:hidden;user-select:none}
+  .game{width:100vw;height:100dvh;max-width:600px;background:linear-gradient(180deg,#6c5ce7 0%,#a55eea 45%,#fd79a8 100%);display:flex;flex-direction:column;position:relative;overflow:hidden}
+  .header{text-align:center;padding:6px 12px 2px;flex-shrink:0;display:flex;justify-content:space-between;color:rgba(255,255,255,0.85);font-size:clamp(11px,2.5vw,13px);font-weight:700}
+  .header .score{color:#ffe259;font-weight:800}
+
   /* Path */
-  .path-container{position:relative;width:100%;flex-shrink:0;height:clamp(190px, 52vw, 340px);margin:2px auto;display:flex;justify-content:center}
-  .path-container svg{height:100%;width:auto;display:block}
+  .path-container{position:relative;width:100%;flex-shrink:0;height:clamp(56px,15vw,84px);margin:2px auto;padding:0 8px}
+  .path-container svg{width:100%;height:100%;display:block}
   .path-dot{position:absolute;width:clamp(40px,10vw,60px);height:clamp(40px,10vw,60px);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 10px rgba(0,0,0,0.3)}
   .path-dot .dot-img{width:80%;height:80%;object-fit:contain;border-radius:50%}
   .path-dot .dot-icon{font-size:clamp(18px,4.5vw,28px)}
   .path-dot.active{border:3px solid #f1c40f;box-shadow:0 0 20px rgba(241,196,15,0.5);transform:scale(1.1)}
   .path-dot.done{border:3px solid #4ecca3;box-shadow:0 0 15px rgba(78,204,163,0.4)}
   .progress{display:flex;justify-content:center;gap:6px;padding:4px 12px;flex-shrink:0}
-  .step{width:clamp(22px,5vw,36px);height:clamp(22px,5vw,36px);border-radius:50%;background:#333;border:2px solid #555;display:flex;align-items:center;justify-content:center;font-size:clamp(10px,2.2vw,16px);transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)}
-  .step.active{background:#4ecca3;border-color:#4ecca3;color:#1a1a2e;font-weight:700;transform:scale(1.1)}
-  .step.done{background:#2d8a6f;border-color:#2d8a6f;color:#fff}
+  .step{width:clamp(22px,5vw,36px);height:clamp(22px,5vw,36px);border-radius:50%;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.4);color:#fff;display:flex;align-items:center;justify-content:center;font-size:clamp(10px,2.2vw,16px);transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+  .step.active{background:#ffe259;border-color:#ffe259;color:#5b3a00;font-weight:800;transform:scale(1.1)}
+  .step.done{background:#55efc4;border-color:#55efc4;color:#0a6b4f}
   
-  .quest{display:flex;align-items:center;justify-content:center;gap:8px;padding:2px 12px;flex-shrink:0;font-size:clamp(12px,2.5vw,15px);color:#f1c40f;text-align:center}
+  .quest{display:flex;align-items:center;justify-content:center;gap:8px;padding:2px 12px;flex-shrink:0;font-size:clamp(12px,2.5vw,15px);color:#ffe259;text-align:center;font-weight:700}
   .quest-icon{font-size:clamp(20px,4vw,28px)}
   
   .arena{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:4px 8px;position:relative}
   .char-banner{display:flex;align-items:center;gap:8px;margin-bottom:6px}
   .char-banner img{width:clamp(40px,9vw,60px);height:clamp(40px,9vw,60px);object-fit:contain;border-radius:10px;background:rgba(255,255,255,0.05)}
-  .char-banner .name{font-size:clamp(14px,3vw,20px);font-weight:600;color:#eee}
-  .question{color:#f1c40f;font-size:clamp(14px,3.2vw,18px);font-weight:600;margin-bottom:6px;text-align:center}
+  .char-banner .name{font-size:clamp(14px,3vw,20px);font-weight:700;color:#fff}
+  .question{color:#ffe259;font-size:clamp(14px,3.2vw,18px);font-weight:800;margin-bottom:6px;text-align:center;text-shadow:0 2px 0 rgba(0,0,0,0.15)}
   .char-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(3px,1vw,8px);padding:6px;max-height:50%;overflow-y:auto}
-  .char-grid .char{width:clamp(38px,8vw,60px);height:clamp(38px,8vw,60px);object-fit:contain;animation:popIn 0.3s ease;background:rgba(255,255,255,0.05);border-radius:8px;padding:3px}
+  .char-grid .char{width:clamp(38px,8vw,60px);height:clamp(38px,8vw,60px);object-fit:contain;animation:popIn 0.3s ease;background:rgba(255,255,255,0.18);border-radius:8px;padding:3px}
   @keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
   
   .options{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(6px,2vw,10px);padding:6px 16px 12px;flex-shrink:0}
-  .opt{padding:clamp(12px,2.5vw,18px);border-radius:12px;border:3px solid #333;background:#16213e;color:#eee;font-size:clamp(20px,5vw,34px);font-weight:700;text-align:center;cursor:pointer;transition:all 0.15s}
-  .opt:hover{border-color:#4ecca3}
-  .opt.correct{border-color:#4ecca3;background:rgba(78,204,163,0.2);animation:correctPulse 0.4s ease}
-  .opt.wrong{border-color:#e74c3c;background:rgba(231,76,60,0.2);animation:shake 0.35s ease}
+  .opt{padding:clamp(12px,2.5vw,18px);border-radius:20px;border:4px solid transparent;background:#fff;color:#6c5ce7;font-size:clamp(20px,5vw,34px);font-weight:800;text-align:center;cursor:pointer;transition:all 0.15s;box-shadow:0 5px 0 rgba(0,0,0,0.15)}
+  .opt:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,0.15)}
+  .opt.correct{border-color:#00b894;background:#e0fff3;animation:correctPulse 0.4s ease}
+  .opt.wrong{border-color:#d63031;background:#ffe3e3;animation:shake 0.35s ease}
   @keyframes correctPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
   @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
   
-  .feedback{text-align:center;padding:2px 12px;min-height:20px;flex-shrink:0;font-size:clamp(13px,2.8vw,18px);font-weight:600}
-  .feedback.ok{color:#4ecca3}.feedback.fail{color:#e74c3c}
+  .feedback{text-align:center;padding:2px 12px;min-height:20px;flex-shrink:0;font-size:clamp(13px,2.8vw,18px);font-weight:800;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,0.15)}
+  .feedback.ok{color:#a9ffd9}.feedback.fail{color:#ffe0e0}
   
   /* Celebration overlay */
-  .celebrate{position:absolute;inset:0;z-index:100;background:rgba(15,52,96,0.92);display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:opacity 0.5s;padding:30px;text-align:center}
+  .celebrate{position:absolute;inset:0;z-index:100;background:linear-gradient(180deg,#6c5ce7 0%,#a55eea 45%,#fd79a8 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:opacity 0.5s;padding:30px;text-align:center}
   .celebrate.active{opacity:1;pointer-events:all}
-  .celebrate h2{font-size:clamp(24px,7vw,42px);color:#f1c40f;margin-bottom:4px}
-  .celebrate .sub{color:#eee;font-size:clamp(16px,3.5vw,24px);margin-bottom:4px}
-  .celebrate .detail{color:#aaa;font-size:clamp(12px,2.5vw,16px)}
+  .celebrate h2{font-size:clamp(24px,7vw,42px);color:#fff;font-weight:800;text-shadow:0 3px 0 rgba(0,0,0,0.18);margin-bottom:4px}
+  .celebrate .sub{color:#fff;font-weight:700;font-size:clamp(16px,3.5vw,24px);margin-bottom:4px}
+  .celebrate .detail{color:rgba(255,255,255,0.85);font-weight:600;font-size:clamp(12px,2.5vw,16px)}
   .celebrate .big-img{width:clamp(80px,18vw,130px);height:clamp(80px,18vw,130px);object-fit:contain;margin:8px 0;border-radius:16px}
   .celebrate .obj-icon{font-size:clamp(36px,9vw,60px);margin:4px 0}
-  .celebrate button{padding:10px 30px;font-size:clamp(13px,2.8vw,17px);font-weight:700;background:#4ecca3;color:#1a1a2e;border:none;border-radius:12px;cursor:pointer;margin-top:12px}
+  .celebrate button{padding:14px 36px;font-size:clamp(16px,4vw,22px);font-weight:800;font-family:inherit;background:linear-gradient(180deg,#ffe259,#ffa751);color:#5b3a00;border:none;border-radius:999px;cursor:pointer;margin-top:12px;box-shadow:0 5px 0 #d9820f;letter-spacing:1px}
   
   .start-overlay{position:absolute;inset:0;z-index:200;background:rgba(15,52,96,0.95);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:30px;text-align:center;transition:opacity 0.5s}
   .start-overlay.hidden{opacity:0;pointer-events:none}
@@ -70,7 +69,6 @@
   /* ===== Mobile kid-size boost ===== */
   @media (max-width:600px){
     .header{font-size:clamp(13px,3.8vw,16px);padding:8px 14px 4px}
-    .path-container{height:clamp(150px,40vw,260px)}
     .question{font-size:clamp(19px,5.5vw,26px);margin-bottom:8px}
     .char-grid{gap:clamp(6px,2.5vw,10px);max-height:none;padding:8px}
     .char-grid .char{width:clamp(54px,15vw,84px);height:clamp(54px,15vw,84px);border-radius:12px;padding:4px}
@@ -112,20 +110,20 @@
   </div>
   
   <div class="path-container" id="pathContainer">
-    <svg viewBox="0 0 200 280" preserveAspectRatio="xMidYMid meet" style="height:100%">
-      <path id="pathTrack" d="M100,250 Q40,225 60,190 Q160,155 100,120 Q40,85 60,50 Q120,25 100,18" fill="none" stroke="#333" stroke-width="5" stroke-linecap="round"/>
-      <path id="pathProgress" d="M100,250 Q40,225 60,190 Q160,155 100,120 Q40,85 60,50 Q120,25 100,18" fill="none" stroke="#4ecca3" stroke-width="5" stroke-linecap="round" stroke-dasharray="450" stroke-dashoffset="450"/>
-      <circle cx="60" cy="190" r="18" fill="#2d2d4e" stroke="#555" stroke-width="2.5" id="svgWp1"/>
-      <text x="60" y="197" text-anchor="middle" font-size="18" fill="#888">⭐</text>
-      <circle cx="100" cy="120" r="18" fill="#2d2d4e" stroke="#555" stroke-width="2.5" id="svgWp2"/>
-      <text x="100" y="127" text-anchor="middle" font-size="18" fill="#888">⭐</text>
-      <circle cx="60" cy="50" r="18" fill="#2d2d4e" stroke="#555" stroke-width="2.5" id="svgWp3"/>
-      <text x="60" y="57" text-anchor="middle" font-size="18" fill="#888">⭐</text>
-      <circle cx="100" cy="18" r="18" fill="none" stroke="none" id="svgWp4"/>
-      <text x="100" y="25" text-anchor="middle" font-size="28" id="goalIcon">👑</text>
+    <svg viewBox="0 0 320 70" preserveAspectRatio="xMidYMid meet">
+      <path id="pathTrack" d="M25,38 Q75,14 130,36 Q185,58 240,36 Q272,20 295,32" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="6" stroke-linecap="round"/>
+      <path id="pathProgress" d="M25,38 Q75,14 130,36 Q185,58 240,36 Q272,20 295,32" fill="none" stroke="#55efc4" stroke-width="6" stroke-linecap="round" stroke-dasharray="300" stroke-dashoffset="300"/>
+      <circle cx="93" cy="26" r="14" fill="rgba(255,255,255,0.25)" stroke="#fff" stroke-width="2" id="svgWp1"/>
+      <text x="93" y="32" text-anchor="middle" font-size="14" fill="#fff">⭐</text>
+      <circle cx="160" cy="45" r="14" fill="rgba(255,255,255,0.25)" stroke="#fff" stroke-width="2" id="svgWp2"/>
+      <text x="160" y="51" text-anchor="middle" font-size="14" fill="#fff">⭐</text>
+      <circle cx="228" cy="40" r="14" fill="rgba(255,255,255,0.25)" stroke="#fff" stroke-width="2" id="svgWp3"/>
+      <text x="228" y="46" text-anchor="middle" font-size="14" fill="#fff">⭐</text>
+      <circle cx="295" cy="32" r="14" fill="none" stroke="none" id="svgWp4"/>
+      <text x="295" y="40" text-anchor="middle" font-size="24" id="goalIcon">👑</text>
       <g id="charGroup" style="transition:transform 0.6s cubic-bezier(0.34,1.56,0.64,1)">
-        <circle cx="0" cy="0" r="22" fill="none" stroke="#f1c40f" stroke-width="3" id="charGlow"/>
-        <image id="pathCharImg" x="-17" y="-17" width="34" height="34" preserveAspectRatio="xMidYMid meet" href=""/>
+        <circle cx="0" cy="0" r="20" fill="rgba(255,255,255,0.9)" stroke="#ffe259" stroke-width="3" id="charGlow"/>
+        <image id="pathCharImg" x="-16" y="-16" width="32" height="32" preserveAspectRatio="xMidYMid meet" href=""/>
       </g>
     </svg>
   </div>
@@ -168,13 +166,13 @@ const CHARS = [
   {file:'baby_box.png',name:'Baby Box',goal:'aos seus brinquedos 🎁',goalIcon:'🎁'},
 ];
 const STEPS = 4;
-// Waypoint positions in SVG coordinates (200x280 viewBox)
+// Waypoint positions in SVG coordinates (320x70 viewBox, horizontal path)
 const WAYPOINTS = [
-  {x:100, y:250},
-  {x:60, y:190},
-  {x:100, y:120},
-  {x:60, y:50},
-  {x:100, y:18},
+  {x:25, y:38},
+  {x:93, y:26},
+  {x:160, y:45},
+  {x:228, y:40},
+  {x:295, y:32},
 ];
 
 let score=0,charIdx=0,charProgress=0,audioInit=false,audioCtx=null;
@@ -245,7 +243,7 @@ function updateProgress(){
   document.getElementById('charGroup').setAttribute('transform', 'translate('+wp.x+','+wp.y+')');
   
   // Update the progress path
-  var totalLen=450;
+  var totalLen=document.getElementById('pathProgress').getTotalLength();
   var pct=charProgress/STEPS;
   document.getElementById('pathProgress').style.strokeDashoffset=totalLen-(totalLen*pct);
 }
